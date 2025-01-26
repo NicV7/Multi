@@ -102,34 +102,58 @@ public class DaoMascota extends Conexion {
         }
     }
 
-    public List<Mascota> obtenerTodasLasMascotas() {
-        List<Mascota> lista = new ArrayList<>();
-        Connection cnx = getConexion();
-        PreparedStatement pst;
-        String sql = "SELECT * FROM mascota";
-        ResultSet rst;
-        try {
-            pst = cnx.prepareStatement(sql);
-            rst = pst.executeQuery();
-            while (rst.next()) {
-                lista.add(new Mascota(
-                        rst.getInt("idmascota"),
-                        rst.getString("nombre"),
-                        rst.getString("raza"),
-                        rst.getInt("edad"),
-                        rst.getDouble("peso"),
-                        rst.getString("color"),
-                        rst.getString("sexo"),
-                        rst.getInt("nitCliente")
-                ));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return lista;
-    }
     
     public void mensaje(String msj, String tit) {
         JOptionPane.showMessageDialog(null, msj, tit, 1);
     }
+    
+    public Mascota obtenerMascotaPorId(int idMascota) {
+    Mascota mascota = null;
+    String query = "SELECT * FROM mascota WHERE idMascota = ?";
+    Connection cnx = getConexion();
+    PreparedStatement pst;
+    try{
+        pst = cnx.prepareStatement(query);
+        pst.setInt(1, idMascota);
+        ResultSet rs = pst.executeQuery();
+        
+        if (rs.next()) {
+            mascota = new Mascota();
+            mascota.setIdMascota(rs.getInt("idMascota"));
+            mascota.setNombre(rs.getString("nombre"));
+            mascota.setRaza(rs.getString("raza"));
+            mascota.setEdad(rs.getInt("edad"));
+            mascota.setColor(rs.getString("color"));
+        }
+    } catch (SQLException e) {
+        System.err.println("Error al obtener la mascota por ID: " + e.getMessage());
+    }
+    
+    return mascota;
+}
+
+    public String obtenerNombreMascota(int idMascota) {
+    String nombreMascota = null;
+    Connection cnx = getConexion();
+    PreparedStatement pst;
+    ResultSet rst;
+    
+    String sql = "SELECT nombre FROM mascota WHERE idMascota = ?";
+    
+    try {
+        pst = cnx.prepareStatement(sql);
+        pst.setInt(1, idMascota);
+        rst = pst.executeQuery();
+        
+        if (rst.next()) {
+            nombreMascota = rst.getString("nombre");
+        }
+    } catch (SQLException ex) {
+        System.err.println("Error al obtener el nombre de la mascota: " + ex);
+    }
+    
+    return nombreMascota;
+}
+
+    
 }

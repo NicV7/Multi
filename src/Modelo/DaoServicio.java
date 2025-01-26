@@ -138,5 +138,43 @@ public class DaoServicio extends Conexion {
     return null;
 }
 
+    public boolean actualizarDisponibilidad(int idServicio) {
+        Connection cnx = getConexion();
+        PreparedStatement pst;
+        String sqlUpdate = "UPDATE servicio SET disponibilidad = disponibilidad - 1 WHERE IDServicio = ?";
+        try{
+            pst = cnx.prepareStatement(sqlUpdate);
+            pst.setInt(1, idServicio); 
+            int rowsAffected = pst.executeUpdate();
+            return rowsAffected > 0; 
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false; 
+        }
+    }
+    
+    public String obtenerNombreServicio(int idServicio) {
+    String nombreServicio = null;
+    Connection cnx = getConexion();
+    PreparedStatement pst;
+    ResultSet rst;
+    
+    String sql = "SELECT nombre FROM servicio WHERE idServicio = ?";
+    
+    try {
+        pst = cnx.prepareStatement(sql);
+        pst.setInt(1, idServicio);
+        rst = pst.executeQuery();
+        
+        if (rst.next()) {
+            nombreServicio = rst.getString("nombre");
+        }
+    } catch (SQLException ex) {
+        System.err.println("Error al obtener el nombre del servicio: " + ex);
+    }
+    
+    return nombreServicio;
+}
+
     
 }

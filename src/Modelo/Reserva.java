@@ -16,13 +16,32 @@ public class Reserva {
     private int IDServicio;
     private int IDMascota;
     private int IDCliente;
+    private int IDCuidador;
     private LocalDate fechaReserva;
 
-    public Reserva(int IDReserva, int IDServicio, int IDMascota, int IDCliente, LocalDate fechaReserva) {
+    private Servicio servicio;
+
+    public Reserva(Servicio servicio) {
+        this.servicio = servicio;
+    }
+
+    public Servicio getServicio() {
+        return servicio;
+    }
+
+    public void setServicio(Servicio servicio) {
+        this.servicio = servicio;
+    }
+    
+    public Reserva() {
+    }
+
+    public Reserva(int IDReserva, int IDServicio, int IDMascota, int IDCliente, int IDCuidador, LocalDate fechaReserva) {
         this.IDReserva = IDReserva;
         this.IDServicio = IDServicio;
         this.IDMascota = IDMascota;
         this.IDCliente = IDCliente;
+        this.IDCuidador = IDCuidador;
         this.fechaReserva = fechaReserva;
     }
 
@@ -58,6 +77,14 @@ public class Reserva {
         this.IDCliente = IDCliente;
     }
 
+    public int getIDCuidador() {
+        return IDCuidador;
+    }
+
+    public void setIDCuidador(int IDCuidador) {
+        this.IDCuidador = IDCuidador;
+    }
+
     public LocalDate getFechaReserva() {
         return fechaReserva;
     }
@@ -65,6 +92,8 @@ public class Reserva {
     public void setFechaReserva(LocalDate fechaReserva) {
         this.fechaReserva = fechaReserva;
     }
+
+    
 
     
     

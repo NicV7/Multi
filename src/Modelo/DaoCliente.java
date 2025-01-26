@@ -94,29 +94,64 @@ public class DaoCliente extends Conexion {
         }
     }
     
-    public List<Cliente> obtenerTodosLosClientes() {
-        List<Cliente> lista = new ArrayList<>();
-        Connection cnx = getConexion();
-        PreparedStatement pst;
-        String sql = "SELECT * FROM Cliente";
-        ResultSet rst;
-        try{
-            pst = cnx.prepareStatement(sql);
-            rst = pst.executeQuery();
-            while (rst.next()) {
-                lista.add(new Cliente(
-                    rst.getInt("nit"),
-                    rst.getString("nombre"),
-                    rst.getString("apellido"),
-                    rst.getString("correo"),
-                    rst.getString("clave")
-                ));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return lista;
+    public ResultSet generarReporteClientes() {
+    Connection cnx = getConexion();
+    String sql = "SELECT Nit, Nombre, Apellido, correo, clave FROM cliente";
+    PreparedStatement pst;
+    try {
+        pst = cnx.prepareStatement(sql);
+        return pst.executeQuery();
+    } catch (SQLException ex) {
+        System.err.println("Error al generar el reporte de clientes: " + ex);
+        JOptionPane.showMessageDialog(null, "Error al generar el reporte de clientes...", "Error", JOptionPane.ERROR_MESSAGE);
     }
+    return null;
+}
+
+    public boolean existeCliente(int nit, String clave) {
+    String sql = "SELECT COUNT(*) FROM cliente WHERE nit = ? AND clave = ?";
+    Connection cnx = getConexion();
+    PreparedStatement pst;
+    try {
+        pst = cnx.prepareStatement(sql);
+        pst.setInt(1, nit);
+        pst.setString(2, clave);
+        
+        try (ResultSet rs = pst.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        }
+    } catch (SQLException e) {
+        System.err.println("Error al verificar cliente: " + e.getMessage());
+    }
+    return false; 
+}
+public String obtenerNombreCliente(int idCliente) {
+    String nombreCliente = null;
+    Connection cnx = getConexion();
+    PreparedStatement pst;
+    ResultSet rst;
+    
+    String sql = "SELECT nombre FROM cliente WHERE idCliente = ?";
+    
+    try {
+        pst = cnx.prepareStatement(sql);
+        pst.setInt(1, idCliente);
+        rst = pst.executeQuery();
+        
+        if (rst.next()) {
+            nombreCliente = rst.getString("nombre");
+        }
+    } catch (SQLException ex) {
+        System.err.println("Error al obtener el nombre del cliente: " + ex);
+    }
+    
+    return nombreCliente;
+}
+
+    
+    
     
     
     public void mensaje(String msj, String tit){

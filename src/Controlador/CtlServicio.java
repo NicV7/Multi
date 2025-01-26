@@ -70,6 +70,7 @@ public class CtlServicio implements ActionListener {
                 vser.txtDescripcion.setText(ser.getDescripcion());
                 vser.txtDuracionEstimada.setText(Integer.toString(ser.getDuracionEstimada()));
                 vser.txtPrecio.setText(Double.toString(ser.getPrecio()));
+                vser.txtDisponibilidad.setText(Integer.toString(ser.getDisponibilidad()));
                 mensaje("Servicio Encontrado..", "Consultar");
             }else{
                 mensaje("Servicio no existe", "Consultar");
@@ -80,11 +81,54 @@ public class CtlServicio implements ActionListener {
             ResultSet rst = daoser.generarReporteServicios();
             if(rst != null){
                 String[] tit = {"IDServicio","Nombre","Descripcion","DuracionEstimada","Disponibilidad","Precio"};
-                DefaultTableModel dtm = ();
+                DefaultTableModel dtm = new DefaultTableModel(null,tit);
+                vser.Tabla.setModel(dtm);
+                try {
+                    while(rst.next()){
+                        Object[] fila = {rst.getInt("IDServicio"),rst.getString("Nombre"),rst.getString("Descripcion"),rst.getInt("DuracionEstimada"),rst.getInt("Disponibilidad"),rst.getDouble("Precio")};
+                        dtm.addRow(fila);
+                    }
+                } catch (SQLException ex) {
+                    System.err.println("Error al buscar los Servicios: "+ex.getMessage());
+                    mensaje(null, "Error al generar el listado de mascota");
+                }
             }
         }
         
+        if(ev.getSource().equals(vser.BtnReservar)){
+            vser.setVisible(false);
+            
+            if(vpri.Escritorio.getComponentCount()>0){
+                vpri.Escritorio.removeAll();
+            }
+            
+            vpri.Escritorio.add(vserre);
+            vserre.setVisible(true);
+            
+            
+            vserre.txtIDServicio.setText(vser.txtIDServicio.getText());
+            vserre.txtServicio.setText(vser.txtNombre.getText());
+            vserre.txtDuracionEstimada.setText(vser.txtDuracionEstimada.getText());
+            vserre.txtPrecio.setText(vser.txtPrecio.getText());
+            vserre.txtDisponibilidad.setText(vser.txtDisponibilidad.getText());
+        }
+        
+        if(ev.getSource().equals(vser.BtnAtras)){
+            
+            vser.setVisible(false);
+            
+            if(vpri.Escritorio.getComponentCount()>0){
+                vpri.Escritorio.removeAll();
+            }
+            
+            vpri.Escritorio.add(vclpri);
+            vclpri.setVisible(true);
+            
+        }
+        
     }
+    
+    
     
     public void mensaje(String msg, String tit){
         JOptionPane.showMessageDialog(null, msg,tit,1);

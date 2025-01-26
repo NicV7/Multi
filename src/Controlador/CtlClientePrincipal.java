@@ -9,8 +9,10 @@ import Modelo.Cliente;
 import Modelo.DaoClienteMascotaReporte;
 import Vista.ClientePerfil;
 import Vista.ClientePrincipal;
+import Vista.GestorFacturas;
 import Vista.GestorMascotas;
 import Vista.Login;
+import Vista.Servicios;
 import Vista.ViewPrincipal;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -29,8 +31,10 @@ public class CtlClientePrincipal implements ActionListener {
     private Cliente cl;
     private DaoClienteMascotaReporte daoclmare;
     private GestorMascotas vgesma;
+    private Servicios vser;
+    private GestorFacturas gesfa;
 
-    public CtlClientePrincipal(Login log, ClientePrincipal vclpri, ClientePerfil vclper, ViewPrincipal vpri, Mascota ma, Cliente cl, DaoClienteMascotaReporte daoclmare, GestorMascotas vgesma) {
+    public CtlClientePrincipal(Login log, ClientePrincipal vclpri, ClientePerfil vclper, ViewPrincipal vpri, Mascota ma, Cliente cl, DaoClienteMascotaReporte daoclmare, GestorMascotas vgesma, Servicios vser, GestorFacturas gesfa) {
         this.log = log;
         this.vclpri = vclpri;
         this.vclper = vclper;
@@ -39,6 +43,8 @@ public class CtlClientePrincipal implements ActionListener {
         this.cl = cl;
         this.daoclmare = daoclmare;
         this.vgesma = vgesma;
+        this.vser = vser;
+        this.gesfa = gesfa;
         
         vclpri.BtnPefilUsuario.addActionListener(this);
         vclpri.BtnPefilMascota.addActionListener(this);
@@ -47,6 +53,7 @@ public class CtlClientePrincipal implements ActionListener {
         vclpri.BtnFacturacion.addActionListener(this);
         vclpri.BtnCerrarSesion.addActionListener(this);
     }
+
 
     @Override
     public void actionPerformed(ActionEvent ev) {
@@ -72,13 +79,34 @@ public class CtlClientePrincipal implements ActionListener {
             vgesma.setVisible(true);
         }
         if(ev.getSource().equals(vclpri.BtnMisReservas)){
+            vclpri.setVisible(false);
             
+            if(vpri.Escritorio.getComponentCount()>0){
+                vpri.Escritorio.removeAll();
+            }
+            
+            vpri.Escritorio.add(vgesma);
+            vgesma.setVisible(true);
         }
         if(ev.getSource().equals(vclpri.BtnReservarServicios)){
+            vclpri.setVisible(false);
+
+            if(vpri.Escritorio.getComponentCount()>0){
+                vpri.Escritorio.removeAll();
+            }
             
+            vpri.Escritorio.add(vser);
+            vser.setVisible(true);
         }
         if(ev.getSource().equals(vclpri.BtnFacturacion)){
+            vclpri.setVisible(false);
+
+            if(vpri.Escritorio.getComponentCount()>0){
+                vpri.Escritorio.removeAll();
+            }
             
+            vpri.Escritorio.add(gesfa);
+            gesfa.setVisible(true);
         }
         if(ev.getSource().equals(vclpri.BtnCerrarSesion)){
             vclpri.setVisible(false);

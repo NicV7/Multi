@@ -26,6 +26,11 @@ public class Servicio {
         this.Precio = Precio;
     }
 
+    public Servicio() {
+    }
+
+    
+    
     public int getIDServicio() {
         return IDServicio;
     }

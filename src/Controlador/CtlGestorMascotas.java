@@ -11,6 +11,7 @@ import Modelo.Mascota;
 import Vista.ClientePrincipal;
 import Vista.GestorMascotas;
 import Vista.MascotaAjuste;
+import Vista.ReservaCliente;
 import Vista.ViewPrincipal;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -34,8 +35,9 @@ public class CtlGestorMascotas implements ActionListener {
     private MascotaAjuste vmaajus;
     private ViewPrincipal vpri;
     private GestorMascotas vgesma;
+    private ReservaCliente vrecl;
 
-    public CtlGestorMascotas(Mascota ma, Cliente cl, DaoClienteMascotaReporte daoclmare, DaoMascota daoma, ClientePrincipal vclpri, MascotaAjuste vmaajus, ViewPrincipal vpri, GestorMascotas vgesma) {
+    public CtlGestorMascotas(Mascota ma, Cliente cl, DaoClienteMascotaReporte daoclmare, DaoMascota daoma, ClientePrincipal vclpri, MascotaAjuste vmaajus, ViewPrincipal vpri, GestorMascotas vgesma, ReservaCliente vrecl) {
         this.ma = ma;
         this.cl = cl;
         this.daoclmare = daoclmare;
@@ -44,13 +46,16 @@ public class CtlGestorMascotas implements ActionListener {
         this.vmaajus = vmaajus;
         this.vpri = vpri;
         this.vgesma = vgesma;
+        this.vrecl = vrecl;
         
         vgesma.BtnAtras.addActionListener(this);
         vgesma.BtnBuscar.addActionListener(this);
         vgesma.BtnGenerar.addActionListener(this);
         vgesma.BtnPefilAjuste.addActionListener(this);
-        
+        vgesma.BtnReservas.addActionListener(this);
     }
+
+    
 
     @Override
     public void actionPerformed(ActionEvent ev) {
@@ -135,6 +140,16 @@ public class CtlGestorMascotas implements ActionListener {
             
         }
         
+        if(ev.getSource().equals(vgesma.BtnReservas)){
+            vgesma.setVisible(false);
+            
+            if(vpri.Escritorio.getComponentCount()>0){
+                vpri.Escritorio.removeAll();
+            }
+            
+            vpri.Escritorio.add(vrecl);
+            vrecl.setVisible(true); 
+        }
         
     }
     
